@@ -6,13 +6,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GlyphFactory {
-    private static final GlyphFactory INSTANCE = new GlyphFactory();
+    private static GlyphFactory INSTANCE;
     private final Map<String, TextGlyph> glyphMap = new HashMap<>();
 
     private GlyphFactory() {
     }
 
     public static GlyphFactory getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new GlyphFactory();
+        }
+
         return INSTANCE;
     }
 

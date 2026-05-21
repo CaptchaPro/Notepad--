@@ -1,4 +1,14 @@
-creating a simple text editor without using any sort of built-in javafx textbox
+**creating a simple text editor without using built-in javafx textboxes**
 
-need data structure that will hold all characters typed
-use this data structure for deleting characters when backspace is pressed?
+data structure options: gap buffer, ropey, piece table.
+decision: gap buffer, easiest to implement.
+
+features to implement (not ordered by importance):
+- navigable cursor through text with keyboard
+- adding and deleting text at cursor position
+- text wrapping
+- window resizing support
+- text highlighting + manipulation of highlighted text
+- saving, creating, and opening a text file.
+- various shortcut support eg. ctrl + backspace
+- enter key support

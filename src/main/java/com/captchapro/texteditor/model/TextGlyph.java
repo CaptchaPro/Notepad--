@@ -4,6 +4,8 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 
+import java.awt.*;
+
 public class TextGlyph implements Glyph {
     private final String font;
     private final int fontSize;

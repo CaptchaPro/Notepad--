@@ -9,6 +9,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Line;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 public class HelloController {
@@ -16,7 +17,7 @@ public class HelloController {
     public Pane textPane;
 
     // temp settings
-    private String font = "Arial";
+    private String fontName = "Arial";
     private int size = 12;
     private Paint color = Color.BLACK;
     private double xPos = 0.0;
@@ -41,10 +42,11 @@ public class HelloController {
     }
 
     private void renderGlyph(String key) {
-        TextGlyph glyph = glyphFactory.getTextGlyph(font, size, color);
+        TextGlyph glyph = glyphFactory.getTextGlyph(fontName, size, color);
         glyph.draw(gc, key, xPos, yPos);
 
         Text text = new Text(key);
+        text.setFont(Font.font(fontName, size));
         double keyWidth = text.getLayoutBounds().getWidth();
 
         xPos += keyWidth;
