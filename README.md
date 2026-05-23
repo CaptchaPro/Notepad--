@@ -3,7 +3,8 @@
 data structure options: gap buffer, ropey, piece table.
 decision: gap buffer, easiest to implement.
 
-move all data to TextContext. 
+TODO: replace StringBuilder with GapBuffer
+TODO: implement up and down arrow key handlers 
 
 features to implement (not ordered by importance):
 - navigable cursor through text with keyboard

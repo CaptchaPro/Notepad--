@@ -18,22 +18,16 @@ public class Controller {
     @FXML
     public Pane textPane;
 
-    // to be placed in TextContext
     // temp settings
     private String fontName = "Arial";
     private int size = 12;
     private Paint color = Color.BLACK;
-    private double xPos = 0.0;
-    private double yPos = 20.0;
 
     private final GlyphFactory glyphFactory = GlyphFactory.getInstance();
     private final TextContext context = new TextContext();
+
     private KeyHandler typedChain;
     private KeyHandler controlChain;
-
-    // to be replaced
-    //private final StringBuilder document = new StringBuilder();
-    //private int cursorIndex  = 0;
 
     Canvas canvas = new Canvas(640, 455);
     Line cursor;
@@ -70,13 +64,22 @@ public class Controller {
     private void redrawDocument() {
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
-        double currentX = 0;
-        double currentY = yPos;
+        double currentX = 0.0;
+        double currentY = 20.0;
+        double lineHeight = getFontHeight(fontName, size);
 
         TextGlyph glyph = glyphFactory.getTextGlyph(fontName, size, color);
 
         for (int i = 0; i < context.getDocument().length(); i++) {
-            String character = String.valueOf(context.getDocument().charAt(i));
+            char c = context.getDocument().charAt(i);
+
+            if (c == '\n') {
+                currentX = 0.0;
+                currentY += lineHeight;
+                continue;
+            }
+
+            String character = String.valueOf(c);
             glyph.draw(gc, character, currentX, currentY);
 
             currentX += getFontWidth(fontName, size, character);
@@ -86,14 +89,23 @@ public class Controller {
     }
 
     private void updateCursorPosition() {
-        double cursorX = 0;
+        double cursorX = 0.0;
+        double cursorY = 20.0;
+        double lineHeight = getFontHeight(fontName, size);
 
         for (int i = 0; i < context.getCursorIndex(); i++) {
-            cursorX += getFontWidth(fontName, size, String.valueOf(context.getDocument().charAt(i)));
+            char c = context.getDocument().charAt(i);
+
+            if (c == '\n') {
+                cursorX = 0.0;
+                cursorY += lineHeight;
+            } else {
+                cursorX += getFontWidth(fontName, size, String.valueOf(c));
+            }
         }
 
         cursor.setTranslateX(cursorX);
-        cursor.setTranslateY(yPos);
+        cursor.setTranslateY(cursorY);
     }
 
     private double getFontWidth(String fontName, int fontSize, String character) {
@@ -116,9 +128,11 @@ public class Controller {
         KeyHandler backspace = new BackspaceHandler();
         KeyHandler leftArrow = new LeftArrowHandler();
         KeyHandler rightArrow = new RightArrowHandler();
+        KeyHandler enter = new EnterHandler();
 
         backspace.setNextHandler(leftArrow);
         leftArrow.setNextHandler(rightArrow);
+        rightArrow.setNextHandler(enter);
 
         typedChain = character;
         controlChain = backspace;
