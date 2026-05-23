@@ -1,15 +1,12 @@
 package com.captchapro.texteditor.Handlers;
 
 import com.captchapro.texteditor.model.TextContext;
-
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
-public class CharacterHandler extends KeyHandler {
+public class RightArrowHandler extends KeyHandler {
     public void handleKeyEvent(KeyEvent event, TextContext context) {
-        String character = event.getCharacter();
-
-        if (!character.isEmpty() && character.charAt(0) > 31) {
-            context.getDocument().insert(context.getCursorIndex(), character);
+        if (event.getCode() == KeyCode.RIGHT && context.getCursorIndex() < context.getDocument().length()) {
             context.setCursorIndex(context.getCursorIndex() + 1);
         } else {
             super.handleKeyEvent(event, context);

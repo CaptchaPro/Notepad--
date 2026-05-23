@@ -14,8 +14,6 @@ public abstract class KeyHandler {
     public void handleKeyEvent(KeyEvent event, TextContext context) {
         if (nextHandler != null) {
             nextHandler.handleKeyEvent(event, context);
-        } else {
-            System.out.println("Unknown Key");
         }
     }
 

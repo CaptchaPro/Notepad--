@@ -1,7 +1,6 @@
 package com.captchapro.texteditor;
 
-import com.captchapro.texteditor.Handlers.CharacterHandler;
-import com.captchapro.texteditor.Handlers.KeyHandler;
+import com.captchapro.texteditor.Handlers.*;
 import com.captchapro.texteditor.model.GlyphFactory;
 import com.captchapro.texteditor.model.TextContext;
 import com.captchapro.texteditor.model.TextGlyph;
@@ -14,8 +13,6 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-
-import static com.captchapro.texteditor.model.GapBuffer.buffer;
 
 public class Controller {
     @FXML
@@ -31,7 +28,8 @@ public class Controller {
 
     private final GlyphFactory glyphFactory = GlyphFactory.getInstance();
     private final TextContext context = new TextContext();
-    private KeyHandler keyChain;
+    private KeyHandler typedChain;
+    private KeyHandler controlChain;
 
     // to be replaced
     //private final StringBuilder document = new StringBuilder();
@@ -51,43 +49,22 @@ public class Controller {
         textPane.setFocusTraversable(true);
 
         updateCursorPosition();
+        createHandlerChains();
 
         textPane.setOnKeyTyped(keyEvent -> {
-            keyChain = new CharacterHandler();
-            keyChain.handleKeyEvent(keyEvent, context);
+            typedChain.handleKeyEvent(keyEvent, context);
 
             // want to try moving this out of controller class
             redrawDocument();
             updateCursorPosition();
         });
 
-        // textPane.setOnKeyPressed(keyEvent -> {
-        //     //System.out.println("Pressed: " + keyEvent.getCode());
-        //     switch (keyEvent.getCode()) {
-        //         case LEFT -> {
-        //             if (cursorIndex > 0) {
-        //                 cursorIndex--;
-        //                 updateCursorPosition();
-        //             }
-        //         }
-        //
-        //         case RIGHT -> {
-        //             if (cursorIndex < document.length()) {
-        //                 cursorIndex++;
-        //                 updateCursorPosition();
-        //             }
-        //         }
-        //
-        //         case BACK_SPACE -> {
-        //             if (cursorIndex > 0) {
-        //                 document.deleteCharAt(cursorIndex - 1);
-        //                 cursorIndex--;
-        //
-        //                 redrawDocument();
-        //             }
-        //         }
-        //     }
-        // });
+        textPane.setOnKeyPressed(keyEvent -> {
+            controlChain.handleKeyEvent(keyEvent, context);
+
+            redrawDocument();
+            updateCursorPosition();
+        });
     }
 
     private void redrawDocument() {
@@ -131,5 +108,19 @@ public class Controller {
         text.setFont(Font.font(fontName, fontSize));
 
         return text.getLayoutBounds().getHeight();
+    }
+
+    private void createHandlerChains() {
+        KeyHandler character = new CharacterHandler();
+
+        KeyHandler backspace = new BackspaceHandler();
+        KeyHandler leftArrow = new LeftArrowHandler();
+        KeyHandler rightArrow = new RightArrowHandler();
+
+        backspace.setNextHandler(leftArrow);
+        leftArrow.setNextHandler(rightArrow);
+
+        typedChain = character;
+        controlChain = backspace;
     }
 }
