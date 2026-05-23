@@ -3,6 +3,8 @@
 data structure options: gap buffer, ropey, piece table.
 decision: gap buffer, easiest to implement.
 
+move all data to TextContext. 
+
 features to implement (not ordered by importance):
 - navigable cursor through text with keyboard
 - adding and deleting text at cursor position
@@ -12,3 +14,4 @@ features to implement (not ordered by importance):
 - saving, creating, and opening a text file.
 - various shortcut support eg. ctrl + backspace
 - enter key support
+- font type, size, and color choices
