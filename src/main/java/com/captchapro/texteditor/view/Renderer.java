@@ -3,7 +3,6 @@ package com.captchapro.texteditor.view;
 import com.captchapro.texteditor.model.GlyphFactory;
 import com.captchapro.texteditor.model.TextContext;
 import com.captchapro.texteditor.model.TextGlyph;
-import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.Pane;
@@ -13,8 +12,6 @@ import javafx.scene.text.Text;
 import javafx.scene.paint.Paint;
 
 public class Renderer {
-
-
     private final GlyphFactory glyphFactory = GlyphFactory.getInstance();
 
     private String fontName = "Arial";
