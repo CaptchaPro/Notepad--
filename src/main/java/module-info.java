@@ -6,4 +6,6 @@ module com.captchapro.texteditor {
 
     opens com.captchapro.texteditor to javafx.fxml;
     exports com.captchapro.texteditor;
+    exports com.captchapro.texteditor.controller;
+    opens com.captchapro.texteditor.controller to javafx.fxml;
 }

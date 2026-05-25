@@ -1,6 +1,5 @@
-package com.captchapro.texteditor;
+package com.captchapro.texteditor.view;
 
-import com.captchapro.texteditor.Handlers.*;
 import com.captchapro.texteditor.model.GlyphFactory;
 import com.captchapro.texteditor.model.TextContext;
 import com.captchapro.texteditor.model.TextGlyph;
@@ -8,60 +7,34 @@ import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.scene.paint.Paint;
 
-public class Controller {
-    @FXML
-    public Pane textPane;
+public class Renderer {
 
-    // temp settings
-    private String fontName = "Arial";
-    private int size = 12;
-    private Paint color = Color.BLACK;
 
     private final GlyphFactory glyphFactory = GlyphFactory.getInstance();
-    private final TextContext context = new TextContext();
 
-    private KeyHandler typedChain;
-    private KeyHandler controlChain;
+    private String fontName = "Arial";
+    private int size = 12;
+    private Paint color = javafx.scene.paint.Color.BLACK;
 
     Canvas canvas = new Canvas(640, 455);
     Line cursor;
     GraphicsContext gc = canvas.getGraphicsContext2D();
 
-    @FXML
-    public void initialize() {
+    public Renderer(Pane textPane) {
         double cursorHeight = getFontHeight(fontName, size);
         cursor = new Line(0, 0, 0, -cursorHeight);
 
         textPane.getChildren().add(canvas);
         textPane.getChildren().add(cursor);
         textPane.setFocusTraversable(true);
-
-        updateCursorPosition();
-        createHandlerChains();
-
-        textPane.setOnKeyTyped(keyEvent -> {
-            typedChain.handleKeyEvent(keyEvent, context);
-
-            // want to try moving this out of controller class
-            redrawDocument();
-            updateCursorPosition();
-        });
-
-        textPane.setOnKeyPressed(keyEvent -> {
-            controlChain.handleKeyEvent(keyEvent, context);
-
-            redrawDocument();
-            updateCursorPosition();
-        });
     }
 
-    private void redrawDocument() {
+    public void redrawDocument(TextContext context) {
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
         double currentX = 0.0;
@@ -85,10 +58,10 @@ public class Controller {
             currentX += getFontWidth(fontName, size, character);
         }
 
-        updateCursorPosition();
+        updateCursorPosition(context);
     }
 
-    private void updateCursorPosition() {
+    public void updateCursorPosition(TextContext context) {
         double cursorX = 0.0;
         double cursorY = 20.0;
         double lineHeight = getFontHeight(fontName, size);
@@ -120,21 +93,5 @@ public class Controller {
         text.setFont(Font.font(fontName, fontSize));
 
         return text.getLayoutBounds().getHeight();
-    }
-
-    private void createHandlerChains() {
-        KeyHandler character = new CharacterHandler();
-
-        KeyHandler backspace = new BackspaceHandler();
-        KeyHandler leftArrow = new LeftArrowHandler();
-        KeyHandler rightArrow = new RightArrowHandler();
-        KeyHandler enter = new EnterHandler();
-
-        backspace.setNextHandler(leftArrow);
-        leftArrow.setNextHandler(rightArrow);
-        rightArrow.setNextHandler(enter);
-
-        typedChain = character;
-        controlChain = backspace;
     }
 }

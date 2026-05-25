@@ -1,4 +1,4 @@
-package com.captchapro.texteditor.Handlers;
+package com.captchapro.texteditor.controller.handlers;
 
 import com.captchapro.texteditor.model.TextContext;
 import javafx.scene.input.KeyCode;
