@@ -40,6 +40,7 @@ public class Renderer {
 
         TextGlyph glyph = glyphFactory.getTextGlyph(fontName, size, color);
 
+        // change to loop through gap buffer array instead of StringBuilder
         for (int i = 0; i < context.getDocument().length(); i++) {
             char c = context.getDocument().charAt(i);
 
@@ -63,6 +64,7 @@ public class Renderer {
         double cursorY = 20.0;
         double lineHeight = getFontHeight(fontName, size);
 
+        // same here, TextContext data should now be accessed like an array
         for (int i = 0; i < context.getCursorIndex(); i++) {
             char c = context.getDocument().charAt(i);
 

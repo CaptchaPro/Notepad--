@@ -4,7 +4,7 @@ data structure options: gap buffer, ropey, piece table.
 decision: gap buffer, easiest to implement.
 
 TODO: replace StringBuilder with GapBuffer
-TODO: implement up and down arrow key handlers 
+TODO: implement up and down arrow key handlers
 
 features to implement (not ordered by importance):
 - navigable cursor through text with keyboard

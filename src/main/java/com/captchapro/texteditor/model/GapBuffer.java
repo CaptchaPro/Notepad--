@@ -1,75 +1,107 @@
 package com.captchapro.texteditor.model;
 
 public class GapBuffer {
-    public static char[] buffer = new char[50];
-    private static int gapSize = 10;
-    private static int gapLeft = 0;
-    private static int gapRight = gapSize - gapLeft - 1;
-    private static int size = 10;
+    private char[] buffer;
+    private int gapStart;
+    private int gapEnd;
 
-    public static void growBuffer(int gap, int position) {
-        char[] chars = new char[size];
-
-        if (size - position >= 0) {
-            System.arraycopy(buffer, position, chars, 0, size - position);
-        }
-
-        for (int i = 0; i < gap; i++) {
-            buffer[i + position] = ' ';
-        }
-
-        for (int i = 0; i < gap; i++) {
-            buffer[position + gap + i] = chars[i];
-        }
-
-        size += gap;
-        gapRight += gap;
+    public GapBuffer() {
+        buffer = new char[32];
+        gapStart = 0;
+        gapEnd = 16;
     }
 
-    public static void moveGapLeft(int position) {
-        while(position < gapLeft) {
-            gapLeft--;
-            gapRight--;
-            buffer[gapRight + 1] = buffer[gapLeft];
-            buffer[gapLeft] = ' ';
+    public int getCursorPosition() {
+        return gapStart;
+    }
+
+    public int gapLength() {
+        return gapEnd - gapStart;
+    }
+
+    public void growBuffer() {
+        char[] newBuffer = new char[buffer.length * 2];
+
+        // copy text before cursor
+        System.arraycopy(buffer, 0, newBuffer, 0, gapStart);
+
+        // copy text after cursor
+        int rightLength = buffer.length - gapEnd;
+        System.arraycopy(buffer, gapEnd, newBuffer, newBuffer.length - rightLength, rightLength);
+
+        buffer = newBuffer;
+        gapEnd = newBuffer.length - rightLength;
+    }
+
+    public void moveGapLeft(int position) {
+        while (position < gapStart) {
+            gapStart--;
+            gapEnd--;
+            buffer[gapEnd] = buffer[gapStart];
+            buffer[gapStart] = '_';
         }
     }
 
-    public static void moveGapRight(int position) {
-        while(position > gapLeft) {
-            gapLeft++;
-            gapRight++;
-            buffer[gapLeft - 1] = buffer[gapRight];
-            buffer[gapRight] = ' ';
+    public void moveGapRight(int position) {
+        while (position > gapStart) {
+            gapStart++;
+            gapEnd++;
+            buffer[gapStart] = buffer[gapEnd];
+            buffer[gapEnd] = '_';
         }
     }
 
-    public static void moveCursor(int position) {
-        if (position < gapLeft) {
+    public void moveCursor(int position) {
+        if (position < gapStart) {
             moveGapLeft(position);
         } else {
             moveGapRight(position);
         }
     }
 
-    private static void insertString(String input, int position) {
-        int length = input.length();
-        int i = 0;
-
-        if (position != gapLeft) {
-            moveCursor(position);
+    public void insertGlyph(char input) {
+        if (gapStart == gapEnd) {
+            growBuffer();
         }
 
-        while (i < length) {
-            if (gapRight == gapLeft) {
-                int gap = 10;
-                growBuffer(gap, position);
-            }
+        buffer[gapStart] = input;
+        gapStart++;
+    }
 
-            buffer[gapLeft] = input.charAt(i);
-            gapLeft++;
-            i++;
-            position++;
+    public void deleteGlyphBehind(int positon) {
+        if (gapStart == 0) {
+            return;
         }
+
+        moveCursor(positon);
+        gapStart--;
+        buffer[gapStart] = '_';
+    }
+
+    public char[] getBuffer() {
+        return buffer;
+    }
+
+    public int getGapStart() {
+        return gapStart;
+    }
+
+    public int getGapEnd() {
+        return gapEnd;
+    }
+
+    //test methods
+    public void setBuffer(String input) {
+        for (int i = 0; i < input.length(); i++) {
+            buffer[i] = input.charAt(i);
+        }
+    }
+
+    public void setGapStart(int num) {
+        gapStart = num;
+    }
+
+    public void setGapEnd(int num) {
+        gapEnd = num;
     }
 }
