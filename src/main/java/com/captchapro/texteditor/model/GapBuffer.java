@@ -8,7 +8,7 @@ public class GapBuffer {
     public GapBuffer() {
         buffer = new char[32];
         gapStart = 0;
-        gapEnd = 16;
+        gapEnd = buffer.length;
     }
 
     public int getCursorPosition() {
@@ -44,10 +44,10 @@ public class GapBuffer {
 
     public void moveGapRight(int position) {
         while (position > gapStart) {
-            gapStart++;
-            gapEnd++;
             buffer[gapStart] = buffer[gapEnd];
             buffer[gapEnd] = '_';
+            gapStart++;
+            gapEnd++;
         }
     }
 

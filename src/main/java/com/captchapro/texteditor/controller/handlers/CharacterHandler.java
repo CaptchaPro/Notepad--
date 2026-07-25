@@ -9,8 +9,7 @@ public class CharacterHandler extends KeyHandler {
         String character = event.getCharacter();
 
         if (!character.isEmpty() && character.charAt(0) > 31) {
-            context.getDocument().insert(context.getCursorIndex(), character);
-            context.setCursorIndex(context.getCursorIndex() + 1);
+            context.getGapBuffer().insertGlyph(character.charAt(0));
         } else {
             super.handleKeyEvent(event, context);
         }

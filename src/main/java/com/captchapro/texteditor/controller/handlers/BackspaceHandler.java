@@ -7,11 +7,10 @@ import javafx.scene.input.KeyEvent;
 
 public class BackspaceHandler extends KeyHandler {
     public void handleKeyEvent(KeyEvent event, TextContext context) {
-        int cursorIndex = context.getCursorIndex();
+        int cursorPosition = context.getGapBuffer().getCursorPosition();
 
-        if (event.getCode() == KeyCode.BACK_SPACE && cursorIndex > 0) {
-            context.getDocument().deleteCharAt(cursorIndex - 1);
-            context.setCursorIndex(cursorIndex - 1);
+        if (event.getCode() == KeyCode.BACK_SPACE && cursorPosition > 0) {
+            context.getGapBuffer().deleteGlyphBehind(cursorPosition);
         } else {
             super.handleKeyEvent(event, context);
         }

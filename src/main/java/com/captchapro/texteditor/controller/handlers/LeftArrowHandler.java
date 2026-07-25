@@ -6,8 +6,10 @@ import javafx.scene.input.KeyEvent;
 
 public class LeftArrowHandler extends KeyHandler {
     public void handleKeyEvent(KeyEvent event, TextContext context) {
-        if (event.getCode() == KeyCode.LEFT && context.getCursorIndex() > 0) {
-            context.setCursorIndex(context.getCursorIndex() - 1);
+        int cursorPosition = context.getGapBuffer().getCursorPosition();
+
+        if (event.getCode() == KeyCode.LEFT && cursorPosition > 0) {
+            context.getGapBuffer().moveGapLeft(cursorPosition - 1);
         } else {
             super.handleKeyEvent(event, context);
         }

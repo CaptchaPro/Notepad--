@@ -7,8 +7,7 @@ import javafx.scene.input.KeyEvent;
 public class EnterHandler extends KeyHandler {
     public void handleKeyEvent(KeyEvent event, TextContext context) {
         if (event.getCode() == KeyCode.ENTER) {
-            context.getDocument().insert(context.getCursorIndex(), "\n");
-            context.setCursorIndex(context.getCursorIndex() + 1);
+            context.getGapBuffer().insertGlyph('\n');
         } else {
             super.handleKeyEvent(event, context);
         }
