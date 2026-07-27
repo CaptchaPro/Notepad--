@@ -4,11 +4,13 @@ public class GapBuffer {
     private char[] buffer;
     private int gapStart;
     private int gapEnd;
+    private int goalColumn;
 
     public GapBuffer() {
         buffer = new char[32];
         gapStart = 0;
         gapEnd = buffer.length;
+        goalColumn = 0;
     }
 
     public int getCursorPosition() {
@@ -38,14 +40,14 @@ public class GapBuffer {
             gapStart--;
             gapEnd--;
             buffer[gapEnd] = buffer[gapStart];
-            buffer[gapStart] = '_';
+            //buffer[gapStart] = '_';
         }
     }
 
     public void moveGapRight(int position) {
         while (position > gapStart) {
             buffer[gapStart] = buffer[gapEnd];
-            buffer[gapEnd] = '_';
+            //buffer[gapEnd] = '_';
             gapStart++;
             gapEnd++;
         }
@@ -75,7 +77,7 @@ public class GapBuffer {
 
         moveCursor(positon);
         gapStart--;
-        buffer[gapStart] = '_';
+        //buffer[gapStart] = '_';
     }
 
     public char[] getBuffer() {
@@ -88,6 +90,10 @@ public class GapBuffer {
 
     public int getGapEnd() {
         return gapEnd;
+    }
+
+    public int getTextLength() {
+        return buffer.length - (gapEnd - gapStart);
     }
 
     //test methods

@@ -1,6 +1,6 @@
 package com.captchapro.texteditor.controller.handlers;
 
-import com.captchapro.texteditor.model.TextContext;
+import com.captchapro.texteditor.model.GapBuffer;
 
 import javafx.scene.input.KeyEvent;
 
@@ -11,9 +11,9 @@ public abstract class KeyHandler {
         this.nextHandler = handler;
     }
 
-    public void handleKeyEvent(KeyEvent event, TextContext context) {
+    public void handleKeyEvent(KeyEvent event, GapBuffer buffer) {
         if (nextHandler != null) {
-            nextHandler.handleKeyEvent(event, context);
+            nextHandler.handleKeyEvent(event, buffer);
         }
     }
 
