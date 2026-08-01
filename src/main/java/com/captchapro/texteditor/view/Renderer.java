@@ -1,7 +1,7 @@
 package com.captchapro.texteditor.view;
 
-import com.captchapro.texteditor.model.GapBuffer;
 import com.captchapro.texteditor.model.GlyphFactory;
+import com.captchapro.texteditor.model.TextContext;
 import com.captchapro.texteditor.model.TextGlyph;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -14,7 +14,7 @@ import javafx.scene.paint.Paint;
 public class Renderer {
     private final GlyphFactory glyphFactory = GlyphFactory.getInstance();
 
-    private String fontName = "Arial";
+    private String fontName = "Courier";
     private int size = 12;
     private Paint color = javafx.scene.paint.Color.BLACK;
 
@@ -31,7 +31,7 @@ public class Renderer {
         textPane.setFocusTraversable(true);
     }
 
-    public void redrawDocument(GapBuffer buffer) {
+    public void redrawDocument(TextContext context) {
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
         double currentX = 0.0;
@@ -40,8 +40,8 @@ public class Renderer {
 
         TextGlyph glyph = glyphFactory.getTextGlyph(fontName, size, color);
 
-        for (int i = 0; i < buffer.getGapStart(); i++) {
-            char c = buffer.getBuffer()[i];
+        for (int i = 0; i < context.getGapStart(); i++) {
+            char c = context.getBuffer()[i];
 
             if (c == '\n') {
                 currentX = 0.0;
@@ -55,8 +55,8 @@ public class Renderer {
             currentX += getFontWidth(fontName, size, character);
         }
 
-        for (int i = buffer.getGapEnd(); i < buffer.getBuffer().length; i++) {
-            char c = buffer.getBuffer()[i];
+        for (int i = context.getGapEnd(); i < context.getBuffer().length; i++) {
+            char c = context.getBuffer()[i];
 
             if (c == '\n') {
                 currentX = 0.0;
@@ -70,16 +70,16 @@ public class Renderer {
             currentX += getFontWidth(fontName, size, character);
         }
 
-        updateCursorPosition(buffer);
+        updateCursorPosition(context);
     }
 
-    public void updateCursorPosition(GapBuffer buffer) {
+    public void updateCursorPosition(TextContext context) {
         double cursorX = 0.0;
         double cursorY = 20.0;
         double lineHeight = getFontHeight(fontName, size);
 
-        for (int i = 0; i < buffer.getCursorPosition(); i++) {
-            char c = buffer.getBuffer()[i];
+        for (int i = 0; i < context.getCursorPosition(); i++) {
+            char c = context.getBuffer()[i];
 
             if (c == '\n') {
                 cursorX = 0.0;

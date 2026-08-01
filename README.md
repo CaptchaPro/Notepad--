@@ -16,3 +16,4 @@ features to implement (not ordered by importance):
 - saving, creating, and opening a text file.
 - various shortcut support eg. ctrl + backspace
 - font type, size, and color choices
+- copy and paste

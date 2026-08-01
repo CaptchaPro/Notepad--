@@ -4,21 +4,11 @@ public class GapBuffer {
     private char[] buffer;
     private int gapStart;
     private int gapEnd;
-    private int goalColumn;
 
     public GapBuffer() {
         buffer = new char[32];
         gapStart = 0;
         gapEnd = buffer.length;
-        goalColumn = 0;
-    }
-
-    public int getCursorPosition() {
-        return gapStart;
-    }
-
-    public int gapLength() {
-        return gapEnd - gapStart;
     }
 
     public void growBuffer() {
@@ -70,14 +60,67 @@ public class GapBuffer {
         gapStart++;
     }
 
-    public void deleteGlyphBehind(int positon) {
+    public void deleteGlyphBehind() {
         if (gapStart == 0) {
             return;
         }
 
-        moveCursor(positon);
         gapStart--;
         //buffer[gapStart] = '_';
+    }
+
+    public LineData getPreviousLineLength(int position) {
+        int nCount = 0;
+        LineData line =  new LineData();
+
+        if (buffer[position] == '\n') {
+            position--;
+        }
+
+        while (position > 0 && nCount < 2) {
+            if (buffer[position] == '\n') {
+                if (nCount == 0) {
+                    line.end = position;
+                } else {
+                    line.start = position + 1;
+                }
+
+                nCount++;
+            }
+
+            position--;
+        }
+
+        line.length = line.end - line.start;
+
+        return line;
+    }
+
+    public LineData getNextLineLength(int position) {
+        int nCount = 0;
+        LineData line = new LineData();
+
+        while (position < getTextLength() && nCount < 2) {
+            if (buffer[position] == '\n') {
+                if (nCount == 0) {
+                    line.start = position + 1;
+                } else {
+                    line.end = position;
+                }
+
+                nCount++;
+            }
+
+            position++;
+        }
+
+        if (nCount == 1) {
+            line.end = getTextLength();
+        }
+
+        line.length = line.end - line.start;
+
+        return line;
     }
 
     public char[] getBuffer() {
@@ -90,6 +133,14 @@ public class GapBuffer {
 
     public int getGapEnd() {
         return gapEnd;
+    }
+
+    public int getCursorPosition() {
+        return gapStart;
+    }
+
+    public int gapLength() {
+        return gapEnd - gapStart;
     }
 
     public int getTextLength() {

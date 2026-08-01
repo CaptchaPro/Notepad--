@@ -1,7 +1,7 @@
 package com.captchapro.texteditor.controller;
 
 import com.captchapro.texteditor.controller.handlers.*;
-import com.captchapro.texteditor.model.GapBuffer;
+import com.captchapro.texteditor.model.TextContext;
 import com.captchapro.texteditor.view.Renderer;
 import javafx.fxml.FXML;
 import javafx.scene.layout.Pane;
@@ -10,7 +10,7 @@ public class TextEditorController {
     @FXML
     public Pane textPane;
 
-    private final GapBuffer buffer = new GapBuffer();
+    private final TextContext context = new TextContext();
     private Renderer render;
 
     private KeyHandler typedChain;
@@ -20,21 +20,21 @@ public class TextEditorController {
     public void initialize() {
         render = new Renderer(textPane);
 
-        render.updateCursorPosition(buffer);
+        render.updateCursorPosition(context);
         createHandlerChains();
 
         textPane.setOnKeyTyped(keyEvent -> {
-            typedChain.handleKeyEvent(keyEvent, buffer);
+            typedChain.handleKeyEvent(keyEvent, context);
 
-            render.redrawDocument(buffer);
-            render.updateCursorPosition(buffer);
+            render.redrawDocument(context);
+            render.updateCursorPosition(context);
         });
 
         textPane.setOnKeyPressed(keyEvent -> {
-            controlChain.handleKeyEvent(keyEvent, buffer);
+            controlChain.handleKeyEvent(keyEvent, context);
 
-            render.redrawDocument(buffer);
-            render.updateCursorPosition(buffer);
+            render.redrawDocument(context);
+            render.updateCursorPosition(context);
         });
     }
 
