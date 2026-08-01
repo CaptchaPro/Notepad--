@@ -63,7 +63,7 @@ public class GapBufferTest {
             gapBuffer.insertGlyph(input.charAt(i));
         }
 
-        gapBuffer.deleteGlyphBehind(gapBuffer.getGapStart());
+        gapBuffer.deleteGlyphBehind();
         System.out.println(gapBuffer.getBuffer());
     }
 
