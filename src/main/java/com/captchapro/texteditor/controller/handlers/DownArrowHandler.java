@@ -9,7 +9,7 @@ public class DownArrowHandler extends KeyHandler {
     public void handleKeyEvent(KeyEvent event, TextContext context) {
         if (event.getCode() == KeyCode.DOWN) {
             LineData line = context.getNextLineLength(context.getCursorPosition());
-            int currentColumn = context.getCurrentColumn();
+            int currentColumn;
 
             if (line.getStart() == 0) {
                 return;
@@ -27,7 +27,7 @@ public class DownArrowHandler extends KeyHandler {
 
             context.moveCursor(newCursorPosition);
             context.setCurrentColumn(currentColumn);
-            System.out.println("Current: " + context.getCurrentColumn() + " Goal: " + context.getGoalColumn());
+            //System.out.println("Current: " + context.getCurrentColumn() + " Goal: " + context.getGoalColumn());
         } else {
             super.handleKeyEvent(event, context);
         }

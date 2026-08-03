@@ -69,60 +69,6 @@ public class GapBuffer {
         //buffer[gapStart] = '_';
     }
 
-    public LineData getPreviousLineLength(int position) {
-        int nCount = 0;
-        LineData line =  new LineData();
-
-        if (buffer[position] == '\n') {
-            position--;
-        }
-
-        while (position > 0 && nCount < 2) {
-            if (buffer[position] == '\n') {
-                if (nCount == 0) {
-                    line.end = position;
-                } else {
-                    line.start = position + 1;
-                }
-
-                nCount++;
-            }
-
-            position--;
-        }
-
-        line.length = line.end - line.start;
-
-        return line;
-    }
-
-    public LineData getNextLineLength(int position) {
-        int nCount = 0;
-        LineData line = new LineData();
-
-        while (position < getTextLength() && nCount < 2) {
-            if (buffer[position] == '\n') {
-                if (nCount == 0) {
-                    line.start = position + 1;
-                } else {
-                    line.end = position;
-                }
-
-                nCount++;
-            }
-
-            position++;
-        }
-
-        if (nCount == 1) {
-            line.end = getTextLength();
-        }
-
-        line.length = line.end - line.start;
-
-        return line;
-    }
-
     public char[] getBuffer() {
         return buffer;
     }
@@ -139,7 +85,7 @@ public class GapBuffer {
         return gapStart;
     }
 
-    public int gapLength() {
+    public int getGapLength() {
         return gapEnd - gapStart;
     }
 
