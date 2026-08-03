@@ -12,13 +12,19 @@ import javafx.scene.text.Text;
 import javafx.scene.paint.Paint;
 
 public class Renderer {
+    private static final int WINDOW_WIDTH = 640;
+    private static final int WINDOW_HEIGHT = 455;
+
     private final GlyphFactory glyphFactory = GlyphFactory.getInstance();
 
-    private String fontName = "Courier";
-    private int size = 12;
+    private String fontName = "Courier New";
+    private int size = 14;
     private Paint color = javafx.scene.paint.Color.BLACK;
 
-    Canvas canvas = new Canvas(640, 455);
+    private final double lineHeight = getFontHeight(fontName, size);
+    private final double fontWidth = getFontWidth(fontName, size, "a");
+
+    Canvas canvas = new Canvas(WINDOW_WIDTH, WINDOW_HEIGHT);
     Line cursor;
     GraphicsContext gc = canvas.getGraphicsContext2D();
 
@@ -36,7 +42,6 @@ public class Renderer {
 
         double currentX = 0.0;
         double currentY = 20.0;
-        double lineHeight = getFontHeight(fontName, size);
 
         TextGlyph glyph = glyphFactory.getTextGlyph(fontName, size, color);
 
@@ -52,7 +57,7 @@ public class Renderer {
             String character = String.valueOf(c);
             glyph.draw(gc, character, currentX, currentY);
 
-            currentX += getFontWidth(fontName, size, character);
+            currentX += fontWidth;
         }
 
         for (int i = context.getGapEnd(); i < context.getBuffer().length; i++) {
@@ -67,7 +72,7 @@ public class Renderer {
             String character = String.valueOf(c);
             glyph.draw(gc, character, currentX, currentY);
 
-            currentX += getFontWidth(fontName, size, character);
+            currentX += fontWidth;
         }
 
         updateCursorPosition(context);
@@ -76,7 +81,6 @@ public class Renderer {
     public void updateCursorPosition(TextContext context) {
         double cursorX = 0.0;
         double cursorY = 20.0;
-        double lineHeight = getFontHeight(fontName, size);
 
         for (int i = 0; i < context.getCursorPosition(); i++) {
             char c = context.getBuffer()[i];
@@ -85,7 +89,7 @@ public class Renderer {
                 cursorX = 0.0;
                 cursorY += lineHeight;
             } else {
-                cursorX += getFontWidth(fontName, size, String.valueOf(c));
+                cursorX += fontWidth;
             }
         }
 

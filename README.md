@@ -1,12 +1,11 @@
 **creating a simple text editor without using built-in javafx textboxes**
 
-data structure options: gap buffer, ropey, piece table.
+data structure options: gap buffer, ropey, piece table.  
 decision: gap buffer, easiest to implement.
 
-TODO: implement up and down arrow key handlers
-TODO: ctrl+left/right arrow key
-TODO: ctrl+backspace
-TODO: undo/redo
+TODO: undo/redo  
+TODO: ctrl+backspace  
+TODO: ctrl+left/right arrow key  
 
 features to implement (not ordered by importance):
 - navigable cursor with mouse
