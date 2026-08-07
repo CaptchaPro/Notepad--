@@ -1,8 +1,15 @@
 package com.captchapro.texteditor.model;
 
+import com.captchapro.texteditor.controller.commands.Command;
+
+import java.util.Stack;
+
 public class TextContext extends GapBuffer {
     private int goalColumn;
     private int currentColumn;
+
+    private Stack<Command> undoStack = new Stack<>();
+    private Stack<Command> redoStack = new Stack<>();
 
     public void setCurrentColumn(int column) {
         this.currentColumn = column;
@@ -88,5 +95,13 @@ public class TextContext extends GapBuffer {
 
     public int getCurrentColumn() {
         return currentColumn;
+    }
+
+    public Stack<Command> getUndoStack() {
+        return undoStack;
+    }
+
+    public Stack<Command> getRedoStack() {
+        return redoStack;
     }
 }

@@ -1,13 +1,13 @@
 package com.captchapro.texteditor.controller.handlers;
 
+import com.captchapro.texteditor.model.InputContext;
 import com.captchapro.texteditor.model.LineData;
 import com.captchapro.texteditor.model.TextContext;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 
 public class DownArrowHandler extends KeyHandler {
-    public void handleKeyEvent(KeyEvent event, TextContext context) {
-        if (event.getCode() == KeyCode.DOWN) {
+    public void handleKeyEvent(InputContext input, TextContext context) {
+        if (input.getMainKey() == KeyCode.DOWN) {
             LineData line = context.getNextLineLength(context.getCursorPosition());
             int currentColumn;
 
@@ -29,7 +29,7 @@ public class DownArrowHandler extends KeyHandler {
             context.setCurrentColumn(currentColumn);
             //System.out.println("Current: " + context.getCurrentColumn() + " Goal: " + context.getGoalColumn());
         } else {
-            super.handleKeyEvent(event, context);
+            super.handleKeyEvent(input, context);
         }
     }
 }

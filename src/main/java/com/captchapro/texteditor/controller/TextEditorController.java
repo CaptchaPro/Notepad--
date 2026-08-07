@@ -1,9 +1,11 @@
 package com.captchapro.texteditor.controller;
 
 import com.captchapro.texteditor.controller.handlers.*;
+import com.captchapro.texteditor.model.InputContext;
 import com.captchapro.texteditor.model.TextContext;
 import com.captchapro.texteditor.view.Renderer;
 import javafx.fxml.FXML;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 
 public class TextEditorController {
@@ -24,14 +26,27 @@ public class TextEditorController {
         createHandlerChains();
 
         textPane.setOnKeyTyped(keyEvent -> {
-            typedChain.handleKeyEvent(keyEvent, context);
+            InputContext input = new InputContext(keyEvent.getCharacter());
+
+            typedChain.handleKeyEvent(input, context);
 
             render.redrawDocument(context);
             render.updateCursorPosition(context);
         });
 
         textPane.setOnKeyPressed(keyEvent -> {
-            controlChain.handleKeyEvent(keyEvent, context);
+            boolean isControlDown = keyEvent.isControlDown();
+            boolean isShiftDown = keyEvent.isShiftDown();
+            boolean isAltDown = keyEvent.isAltDown();
+            KeyCode code = keyEvent.getCode();
+
+            if (code.isModifierKey()) {
+                return;
+            }
+
+            InputContext input = new InputContext(code, isControlDown, isShiftDown, isAltDown);
+
+            controlChain.handleKeyEvent(input, context);
 
             render.redrawDocument(context);
             render.updateCursorPosition(context);
@@ -41,6 +56,9 @@ public class TextEditorController {
     private void createHandlerChains() {
         KeyHandler character = new CharacterHandler();
 
+        KeyHandler redo = new RedoHandler();
+        KeyHandler undo = new UndoHandler();
+
         KeyHandler backspace = new BackspaceHandler();
         KeyHandler leftArrow = new LeftArrowHandler();
         KeyHandler rightArrow = new RightArrowHandler();
@@ -48,6 +66,8 @@ public class TextEditorController {
         KeyHandler downArrow = new DownArrowHandler();
         KeyHandler enter = new EnterHandler();
 
+        redo.setNextHandler(undo);
+        undo.setNextHandler(backspace);
         backspace.setNextHandler(leftArrow);
         leftArrow.setNextHandler(rightArrow);
         rightArrow.setNextHandler(upArrow);
@@ -55,6 +75,6 @@ public class TextEditorController {
         downArrow.setNextHandler(enter);
 
         typedChain = character;
-        controlChain = backspace;
+        controlChain = redo;
     }
 }
